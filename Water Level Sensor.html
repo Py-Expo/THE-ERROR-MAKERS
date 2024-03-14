@@ -1,0 +1,19 @@
+"Water level sensor" 
+
+#include <Arduino.h>
+
+const int waterLevelPin = A0; // Analog pin connected to the water level sensor
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(waterLevelPin, INPUT); // Ensure the pin is set to input mode
+}
+
+void loop() {
+  int waterLevel = analogRead(waterLevelPin);
+  Serial.print("Analog Value: ");
+  Serial.println(waterLevel);
+
+  // Add a delay to observe the readings over time
+  delay(1000); // Read every second
+}

@@ -1,0 +1,37 @@
+Temperature sensor
+
+
+from machine import Pin, ADC
+import time
+
+# Define GPIO pin for relay control
+relay_pin = Pin(5, Pin.OUT)  # GPIO5 (D1) as output
+
+# Define ADC pin for temperature sensor
+temp_sensor_pin = ADC(0)  # Analog pin connected to the temperature sensor
+
+# Define thresholds for temperature control
+TEMP_THRESHOLD = 25  # Temperature threshold in degrees Celsius
+
+# Function to toggle relay state
+def toggle_relay(state):
+    relay_pin.value(state)
+
+# Function to read temperature
+def read_temperature():
+    # Assuming LM35 temperature sensor, convert ADC reading to temperature
+    adc_value = temp_sensor_pin.read()
+    temperature = (adc_value * 3.3 / 1023) * 100  # LM35 output is 10mV/°C
+    return temperature
+
+# Main loop
+while True:
+    temperature = read_temperature()  # Read temperature
+    print("Temperature:", temperature, "C")
+
+    if temperature > TEMP_THRESHOLD:
+        toggle_relay(True)  # Start the relay (activate motor) if temperature is above threshold
+    else:
+        toggle_relay(False)  # Stop the relay (deactivate motor) if temperature is below threshold
+
+    time.sleep(1)  # Wait for 1 second
